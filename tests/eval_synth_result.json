@@ -1,0 +1,251 @@
+{
+ "summary": {
+  "beat_F": 0.904,
+  "within_1f": 0.866,
+  "downbeat_F": 0.813,
+  "mean_abs_ms": 10.5,
+  "sections_hit": 0.677
+ },
+ "cases": [
+  {
+   "case": "72bpm 直拍",
+   "beat_F": 0.98,
+   "mean_abs_ms": 9.3,
+   "median_ms": -1.3,
+   "within_1f": 0.847,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 71.8
+  },
+  {
+   "case": "72bpm 人手±12ms",
+   "beat_F": 0.721,
+   "mean_abs_ms": 11.5,
+   "median_ms": -4.7,
+   "within_1f": 0.952,
+   "downbeat_F": 0.746,
+   "sections_hit": "1/4",
+   "tempo_est": 71.8
+  },
+  {
+   "case": "72bpm 摇摆",
+   "beat_F": 0.869,
+   "mean_abs_ms": 4.7,
+   "median_ms": -1.3,
+   "within_1f": 0.951,
+   "downbeat_F": 0.576,
+   "sections_hit": "1/4",
+   "tempo_est": 71.8
+  },
+  {
+   "case": "72bpm 速度漂移±4%",
+   "beat_F": 0.611,
+   "mean_abs_ms": 8.0,
+   "median_ms": -1.8,
+   "within_1f": 0.883,
+   "downbeat_F": 0.635,
+   "sections_hit": "3/4",
+   "tempo_est": 71.8
+  },
+  {
+   "case": "90bpm 直拍",
+   "beat_F": 0.98,
+   "mean_abs_ms": 11.7,
+   "median_ms": 0.0,
+   "within_1f": 0.792,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 90.7
+  },
+  {
+   "case": "90bpm 人手±12ms",
+   "beat_F": 0.777,
+   "mean_abs_ms": 10.6,
+   "median_ms": -4.7,
+   "within_1f": 0.978,
+   "downbeat_F": 0.0,
+   "sections_hit": "1/4",
+   "tempo_est": 89.1
+  },
+  {
+   "case": "90bpm 摇摆",
+   "beat_F": 0.87,
+   "mean_abs_ms": 6.9,
+   "median_ms": -1.7,
+   "within_1f": 0.894,
+   "downbeat_F": 0.6,
+   "sections_hit": "2/4",
+   "tempo_est": 90.7
+  },
+  {
+   "case": "90bpm 速度漂移±4%",
+   "beat_F": 0.881,
+   "mean_abs_ms": 6.1,
+   "median_ms": -2.0,
+   "within_1f": 0.928,
+   "downbeat_F": 0.635,
+   "sections_hit": "3/4",
+   "tempo_est": 89.1
+  },
+  {
+   "case": "100bpm 直拍",
+   "beat_F": 0.93,
+   "mean_abs_ms": 8.5,
+   "median_ms": -1.0,
+   "within_1f": 0.882,
+   "downbeat_F": 0.906,
+   "sections_hit": "3/4",
+   "tempo_est": 99.4
+  },
+  {
+   "case": "100bpm 人手±12ms",
+   "beat_F": 0.953,
+   "mean_abs_ms": 15.0,
+   "median_ms": 2.0,
+   "within_1f": 0.852,
+   "downbeat_F": 0.938,
+   "sections_hit": "3/4",
+   "tempo_est": 99.4
+  },
+  {
+   "case": "100bpm 摇摆",
+   "beat_F": 0.93,
+   "mean_abs_ms": 8.7,
+   "median_ms": -1.0,
+   "within_1f": 0.874,
+   "downbeat_F": 0.906,
+   "sections_hit": "3/4",
+   "tempo_est": 99.4
+  },
+  {
+   "case": "100bpm 速度漂移±4%",
+   "beat_F": 0.63,
+   "mean_abs_ms": 7.6,
+   "median_ms": -1.9,
+   "within_1f": 0.925,
+   "downbeat_F": 0.635,
+   "sections_hit": "3/4",
+   "tempo_est": 99.4
+  },
+  {
+   "case": "112bpm 直拍",
+   "beat_F": 0.98,
+   "mean_abs_ms": 9.2,
+   "median_ms": -0.6,
+   "within_1f": 0.864,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 112.3
+  },
+  {
+   "case": "112bpm 人手±12ms",
+   "beat_F": 0.98,
+   "mean_abs_ms": 15.0,
+   "median_ms": 7.0,
+   "within_1f": 0.848,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 112.3
+  },
+  {
+   "case": "112bpm 摇摆",
+   "beat_F": 0.98,
+   "mean_abs_ms": 9.6,
+   "median_ms": -0.6,
+   "within_1f": 0.856,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 112.3
+  },
+  {
+   "case": "112bpm 速度漂移±4%",
+   "beat_F": 0.83,
+   "mean_abs_ms": 5.0,
+   "median_ms": -2.1,
+   "within_1f": 0.971,
+   "downbeat_F": 0.562,
+   "sections_hit": "3/4",
+   "tempo_est": 110.0
+  },
+  {
+   "case": "124bpm 直拍",
+   "beat_F": 0.973,
+   "mean_abs_ms": 13.0,
+   "median_ms": -1.8,
+   "within_1f": 0.776,
+   "downbeat_F": 0.906,
+   "sections_hit": "3/4",
+   "tempo_est": 123.0
+  },
+  {
+   "case": "124bpm 人手±12ms",
+   "beat_F": 0.973,
+   "mean_abs_ms": 17.7,
+   "median_ms": 0.5,
+   "within_1f": 0.776,
+   "downbeat_F": 0.906,
+   "sections_hit": "3/4",
+   "tempo_est": 123.0
+  },
+  {
+   "case": "124bpm 摇摆",
+   "beat_F": 0.973,
+   "mean_abs_ms": 12.9,
+   "median_ms": -1.9,
+   "within_1f": 0.784,
+   "downbeat_F": 0.906,
+   "sections_hit": "3/4",
+   "tempo_est": 123.0
+  },
+  {
+   "case": "124bpm 速度漂移±4%",
+   "beat_F": 0.973,
+   "mean_abs_ms": 12.4,
+   "median_ms": -1.9,
+   "within_1f": 0.824,
+   "downbeat_F": 0.938,
+   "sections_hit": "3/4",
+   "tempo_est": 123.0
+  },
+  {
+   "case": "140bpm 直拍",
+   "beat_F": 0.973,
+   "mean_abs_ms": 10.2,
+   "median_ms": -1.9,
+   "within_1f": 0.848,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 139.7
+  },
+  {
+   "case": "140bpm 人手±12ms",
+   "beat_F": 0.973,
+   "mean_abs_ms": 17.0,
+   "median_ms": 3.0,
+   "within_1f": 0.816,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 139.7
+  },
+  {
+   "case": "140bpm 摇摆",
+   "beat_F": 0.973,
+   "mean_abs_ms": 9.9,
+   "median_ms": -1.9,
+   "within_1f": 0.856,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 139.7
+  },
+  {
+   "case": "140bpm 速度漂移±4%",
+   "beat_F": 0.981,
+   "mean_abs_ms": 11.2,
+   "median_ms": -1.7,
+   "within_1f": 0.802,
+   "downbeat_F": 0.969,
+   "sections_hit": "3/4",
+   "tempo_est": 139.7
+  }
+ ]
+}

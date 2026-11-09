@@ -1,0 +1,14 @@
+librosa>=0.10
+numpy
+scipy
+soundfile
+opencv-python-headless
+pillow
+torch==2.12.1
+torchaudio==2.11.0
+demucs==4.0.1
+# 测试与导出验证
+mir_eval
+opentimelineio
+otio-fcp-adapter
+otio-fcpx-xml-adapter
