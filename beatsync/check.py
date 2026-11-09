@@ -172,7 +172,7 @@ def report_html(rep, rows, worst, C, diff, fps):
     beats = "".join(f'<line x1="{x(b["t"])}" x2="{x(b["t"])}" y1="{"72" if b["beat"] == 1 else "76"}" y2="80" class="beat"/>'
                     for b in C["beats"] if b["t"] <= dur)
     cutl = "".join(
-        f'<line x1="{x(r["t"])}" x2="{x(r["t"])}" y1="0" y2="70" class="{"ok" if r["off"] == 0 else ("near" if r["off"] is not None and abs(r["off"]) <= 1 else "bad")}"><title>{r["t"]:.2f}s 偏 {r["off"]} 帧 · {html.escape(r["why"])}</title></line>'
+        f'<line x1="{x(r["t"])}" x2="{x(r["t"])}" y1="0" y2="70" class="{"miss" if r["off"] is None else ("ok" if r["off"] == 0 else ("near" if abs(r["off"]) <= 1 else "bad"))}"><title>{r["t"]:.2f}s {"无法测量（前后画面太像）" if r["off"] is None else f"偏 {r['off']} 帧"} · {html.escape(r["why"])}</title></line>'
         for r in rows)
     secs = "".join(f'<rect x="{x(s["start"])}" width="{float(x(s["end"])) - float(x(s["start"])):.1f}" y="0" height="80" class="sec {s["level"]}"><title>{s["level"]} {s["start"]:.1f}–{s["end"]:.1f}s</title></rect>'
                    for s in C["sections"])
@@ -200,7 +200,7 @@ main{{max-width:1140px;margin:auto}} h1{{font-size:26px;margin:0 0 4px}} .mut{{c
 .kpi{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:24px 0}}
 .kpi div{{border:1px solid var(--line);border-radius:10px;padding:14px}} .kpi b{{display:block;font-size:28px}}
 svg{{width:100%;height:auto;border:1px solid var(--line);border-radius:8px}}
-.beat{{stroke:var(--mut);stroke-width:.6}} .ok{{stroke:var(--ok);stroke-width:1.2}} .near{{stroke:var(--near);stroke-width:1.6}} .bad{{stroke:var(--bad);stroke-width:2}}
+.beat{{stroke:var(--mut);stroke-width:.6}} .ok{{stroke:var(--ok);stroke-width:1.2}} .near{{stroke:var(--near);stroke-width:1.6}} .bad{{stroke:var(--bad);stroke-width:2}} .miss{{stroke:var(--mut);stroke-width:1;stroke-dasharray:2 2}}
 .sec{{fill:transparent}} .sec.最高{{fill:var(--acc);opacity:.10}} .sec.高{{fill:var(--acc);opacity:.05}}
 polyline{{fill:none;stroke:var(--acc);stroke-width:1.4}}
 .hb{{display:grid;grid-template-columns:70px 1fr 40px;gap:8px;align-items:center;margin:4px 0}} .hb i{{display:block;height:12px;background:var(--acc);border-radius:3px}}
@@ -214,7 +214,7 @@ polyline{{fill:none;stroke:var(--acc);stroke-width:1.4}}
 <div>音画整体偏移<b>{av_txt}</b><span class="mut">成片音轨 vs 原曲</span></div>
 {act_html}
 </div>
-<h3>时间轴</h3><div class="mut">蓝线 = 能量；底部刻度 = 拍（长的是强拍）；竖线 = 切点（绿=正好，黄=差 1 帧，红=差更多）；底色深 = 高潮段</div>
+<h3>时间轴</h3><div class="mut">蓝线 = 能量；底部刻度 = 拍（长的是强拍）；竖线 = 切点（绿=正好，黄=差 1 帧，红=差更多，灰虚线=前后画面太像、无法测量）；底色深 = 高潮段</div>
 <svg viewBox="0 0 {Wd} 80" preserveAspectRatio="none">{secs}<polyline points="{pts}"/>{beats}{cutl}</svg>
 <h3>误差分布</h3>{bars}
 <h3>偏得最多的切点（切前一帧 | 切后一帧）</h3><div class="grid">{worst_html or '<span class="mut">没有</span>'}</div>
