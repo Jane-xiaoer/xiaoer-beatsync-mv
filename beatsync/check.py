@@ -161,6 +161,10 @@ def check(video, plan=None, cues=None, audio=None, out=None):
     return rep, out
 
 
+def off_label(off):
+    return "无法测量（前后画面太像）" if off is None else f"偏 {off} 帧"
+
+
 def report_html(rep, rows, worst, C, diff, fps):
     dur = rep["frames"] / fps
     Wd = 1100
@@ -172,7 +176,7 @@ def report_html(rep, rows, worst, C, diff, fps):
     beats = "".join(f'<line x1="{x(b["t"])}" x2="{x(b["t"])}" y1="{"72" if b["beat"] == 1 else "76"}" y2="80" class="beat"/>'
                     for b in C["beats"] if b["t"] <= dur)
     cutl = "".join(
-        f'<line x1="{x(r["t"])}" x2="{x(r["t"])}" y1="0" y2="70" class="{"miss" if r["off"] is None else ("ok" if r["off"] == 0 else ("near" if abs(r["off"]) <= 1 else "bad"))}"><title>{r["t"]:.2f}s {"无法测量（前后画面太像）" if r["off"] is None else f"偏 {r['off']} 帧"} · {html.escape(r["why"])}</title></line>'
+        f'<line x1="{x(r["t"])}" x2="{x(r["t"])}" y1="0" y2="70" class="{"miss" if r["off"] is None else ("ok" if r["off"] == 0 else ("near" if abs(r["off"]) <= 1 else "bad"))}"><title>{r["t"]:.2f}s {off_label(r["off"])} · {html.escape(r["why"])}</title></line>'
         for r in rows)
     secs = "".join(f'<rect x="{x(s["start"])}" width="{float(x(s["end"])) - float(x(s["start"])):.1f}" y="0" height="80" class="sec {s["level"]}"><title>{s["level"]} {s["start"]:.1f}–{s["end"]:.1f}s</title></rect>'
                    for s in C["sections"])
