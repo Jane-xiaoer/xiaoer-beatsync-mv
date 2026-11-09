@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>小耳音乐卡点MV · 产品说明书</title>
+<style>
+  @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
+  :root { --ink:#1d1b18; --mut:#6f6a60; --line:#d9d2c3; --acc:#1f4e79; --warm:#b5532c; --bg:#faf8f3; }
+  * { box-sizing: border-box; }
+  body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; color: var(--ink);
+         font-size: 10.5pt; line-height: 1.75; margin: 0; background: #fff; }
+  h1 { font-size: 26pt; margin: 0 0 4pt; letter-spacing: .02em; }
+  h2 { font-size: 15pt; margin: 22pt 0 8pt; padding-bottom: 4pt; border-bottom: 1.5px solid var(--ink);
+       break-after: avoid; }
+  h2 .n { color: var(--warm); margin-right: 8pt; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 11.5pt; margin: 14pt 0 4pt; break-after: avoid; }
+  p { margin: 4pt 0 8pt; }
+  .mut { color: var(--mut); }
+  .cover { padding: 40pt 0 18pt; border-bottom: 1px solid var(--line); margin-bottom: 8pt; }
+  .tag { display:inline-block; font-size: 9pt; border:1px solid var(--line); border-radius: 3pt; padding: 1pt 6pt; margin: 0 4pt 4pt 0; color: var(--mut); }
+  .lead { font-size: 13pt; margin: 10pt 0 14pt; }
+  table { width: 100%; border-collapse: collapse; margin: 6pt 0 10pt; font-size: 9.6pt; break-inside: avoid; }
+  th, td { border-bottom: 1px solid var(--line); padding: 5pt 6pt; text-align: left; vertical-align: top; }
+  th { background: var(--bg); font-weight: 600; }
+  .kv td:first-child { width: 22%; color: var(--mut); }
+  .box { background: var(--bg); border-left: 3px solid var(--acc); padding: 8pt 12pt; margin: 8pt 0 12pt; break-inside: avoid; }
+  .box.warm { border-left-color: var(--warm); }
+  .formula { font-family: "SF Mono", Menlo, monospace; font-size: 10pt; }
+  code { font-family: "SF Mono", Menlo, monospace; font-size: 9pt; background: var(--bg); padding: 0 3pt; border-radius: 2pt; }
+  pre { font-family: "SF Mono", Menlo, monospace; font-size: 8.8pt; background: var(--bg); padding: 8pt 10pt; border-radius: 3pt; line-height: 1.55; white-space: pre-wrap; break-inside: avoid; }
+  .frames { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4pt; margin: 6pt 0; }
+  .frames img { width: 100%; display: block; border-radius: 2pt; }
+  figure { margin: 8pt 0 12pt; break-inside: avoid; }
+  figure img, figure svg { width: 100%; display: block; }
+  figcaption { font-size: 9pt; color: var(--mut); margin-top: 4pt; }
+  .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6pt; margin: 8pt 0 12pt; break-inside: avoid; }
+  .flow div { border: 1px solid var(--line); border-radius: 4pt; padding: 7pt 8pt; font-size: 9.2pt; line-height: 1.5; }
+  .flow b { display:block; font-size: 10pt; margin-bottom: 2pt; }
+  .flow .you { border-color: var(--warm); background: #fbf1ec; }
+  ul, ol { margin: 4pt 0 8pt; padding-left: 18pt; }
+  li { margin: 2pt 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; }
+  .pb { break-before: page; }
+  .small { font-size: 9pt; }
+  .done { color: #1f7a4d; font-weight: 600; }
+  .plan { color: var(--warm); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="mut">海影节 AI FILM GALA · Film Agent Demo Day · 产品说明书</div>
+  <h1>小耳音乐卡点MV</h1>
+  <div class="mut" style="font-size:12pt">Xiaoer BeatSync MV · v1.0 · 2026 年 11 月</div>
+  <p class="lead">AI 管「画面怎么长」，音乐管「什么时候长、长多快」——<br>让一支 MV 的每一帧，都成为音乐的函数。</p>
+  <span class="tag">Skill / Skill 包</span><span class="tag">Claude Code · Codex 可调用</span><span class="tag">命令行可独立使用</span><span class="tag">开源 MIT</span>
+</div>
+
+<h2><span class="n">01</span>产品基本信息与简介</h2>
+<table class="kv">
+  <tr><td>产品名称</td><td>小耳音乐卡点MV（Xiaoer BeatSync MV）</td></tr>
+  <tr><td>主要形态</td><td>Skill 包（给 AI Agent 调用的技能 + 一组命令行工具）</td></tr>
+  <tr><td>当前版本</td><td>v1.0（2026-11）</td></tr>
+  <tr><td>创作者</td><td>小耳 · AI 艺术家、AI Builder 与 Creative Technologist</td></tr>
+  <tr><td>开源地址</td><td>https://github.com/Jane-xiaoer/xiaoer-beatsync-mv</td></tr>
+  <tr><td>一句话</td><td>给一段音乐和一组画面素材，自动做出一支「画面跟着音符生长」的 MV：卡点精确到帧，并从成片逐帧体检。</td></tr>
+</table>
+
+<h2><span class="n">02</span>目标用户与使用场景</h2>
+<table>
+  <tr><th style="width:24%">谁</th><th style="width:30%">在什么环节</th><th>遇到什么问题</th></tr>
+  <tr><td>AI 影像创作者、MV 导演</td><td>AI 短片、音乐 MV 的后期：音画同步</td><td>AI 能生成好看的镜头，但做成 MV 时画面和音乐「各走各的」；要让画面跟着音乐动，只能一段段手调变速。</td></tr>
+  <tr><td>剪辑师</td><td>节奏剪辑、预剪</td><td>找拍点、找乐句、决定哪里换镜全靠耳朵和手动打点，一首歌要来回听几十遍。</td></tr>
+  <tr><td>品牌与内容团队</td><td>音乐驱动的宣传片、社媒短视频</td><td>同一套素材要配不同的歌，每换一首就要重剪一遍。</td></tr>
+</table>
+<div class="box warm"><b>原有做法的困难</b>：音乐是画面的灵魂，要跟画面完美结合，也就是俗称的「卡点」。传统的卡点通常只是让画面的切换落在某个音乐节拍上——一个节拍换一个画面，或者选一个相对合适的动态跟某段快节奏放在一起；并且由人工判断、手动操作，无法精确到推拉的速度，无法把音乐的鼓点、人声、节奏跟画面每一帧的变化完美结合在一起，技术上非常麻烦。</div>
+
+<h2><span class="n">03</span>创作背景与来源</h2>
+<p><b>来自我自己的作品。</b>2026 年 9 月，我用很喜欢的动画片《凯尔经的秘密》的主题曲做了一支 MV：MJ 出关键画面，首尾帧图生视频做出 17 段「生长」与「变形」镜头，再让音乐推动每一段的播放速度。v7 定稿达到了我想要的样子——<b>画面随每一个音符向前生长，音乐停下的地方，画面也停下等它回来</b>。</p>
+<p>但那一版是我作为导演逐段手排的：每段素材放在第几秒、在哪里换、气口怎么处理，都写在一张手工表里。做完无法复用，换一首歌就得重来。这个 Skill 就是把那次实践拆解成可复用的流程，让 Agent 按我的判断自动执行。</p>
+<h3>思路来源</h3>
+<ul>
+  <li><b>个人实践</b>：凯尔经 MV（音乐推播放头的公式、编排规则）；小耳 FM 可视化音乐播放器（1082 首歌的分轨与音画对位经验，比如「分轨能量曲线会晚 60～75ms，卡点必须用起音」）。</li>
+  <li><b>开源技术</b>（均已署名并保留许可证）：Demucs 分轨（MIT）；librosa 音频分析（ISC）；节拍网格拟合与鼓轨起音分类改写自 pdoom-video（MIT，Giacomo Magnanini）；OpenCV、FFmpeg 负责画面与编码；OpenTimelineIO 用于验证导出的时间线。</li>
+  <li><b>本人原创</b>：凯尔经公式（画面推进速度）、三层编排规则、气口处理、「起音即动作」原则、成片逐帧体检方法。</li>
+</ul>
+
+<h2 class="pb"><span class="n">04</span>创作思路与解决方案</h2>
+<p><b>理解问题</b>：卡点不只是「在拍上切」。音乐至少有三层——<b>拍</b>（每个音符的起点）、<b>乐句</b>（一句话的呼吸）、<b>段落</b>（整首歌的起伏）。好的 MV 三层都要对上：拍决定动作落在哪一帧，乐句决定在哪里换镜，段落决定整支片子的疏密和情绪。</p>
+<p><b>核心方案</b>：我把音乐拆成四个轨道，并且把这些轨道作为函数，控制到画面的每一帧——也就是说，<b>每一帧都变成了以音乐为自变量的时间函数</b>，以此实现最为精确的控制。这样得到的是一个完全符合音乐变化的视觉；因为精确到了每一帧，这种视觉是过去的 MV 不曾有过的。鼓、贝斯、人声、旋律的每一个起音，都在同一帧推动画面生长；没有声音的地方，画面停住、等音乐回来。</p>
+<p>编排规则来自我作为导演手排定稿的判断，交给 Agent 自动执行；<b>创作者只需决定选择喜欢的音乐，以及自己想要的画面</b>。</p>
+<div class="box"><span class="formula">播放头速度(t) = 0.06 + 0.8 × 响度(t)<sup>1.5</sup> + Σ 各轨起音推力</span><br>
+<span class="small">推力 = 权重 × 起音强度 × e<sup>−Δt/τ</sup>：旋律 1.0 / 0.22s，鼓 1.4 / 0.16s，人声 0.6 / 0.3s，贝斯 0.7 / 0.4s。每段素材内积分归一 → 乐句结束时片子正好播完；没有音符的地方，速度只剩 0.06，画面几乎停住。</span></div>
+
+<h3>整体流程与创作者的判断节点</h3>
+<div class="flow">
+  <div class="you"><b>① 选歌与画面</b>创作者决定：用哪首歌、画面风格、素材的故事顺序</div>
+  <div><b>② 分轨 + 卡点</b>4 轨分离；拍、小节、乐句、段落、气口、各轨起音，每点带置信度</div>
+  <div><b>③ 自动编排</b>按导演规则排出每段素材的起止时间，每一刀写明理由</div>
+  <div><b>④ 音乐推画面</b>凯尔经公式逐帧推进播放头，段间溶解</div>
+  <div class="you"><b>⑤ 审片与修改</b>创作者看体检报告和成片，可改方案、锁定后重出</div>
+</div>
+
+<h3>编排规则（从凯尔经 v7 手排定稿归纳）</h3>
+<ol>
+  <li>平常一段素材配一句（2 小节）；安静段一段铺两句；高潮加密到一句半；最后一段铺到结尾。</li>
+  <li>切点只落在半小节上；强拍把握不足时，第 1 拍与第 3 拍一视同仁。</li>
+  <li><b>气口前后不切</b>：上一段带着走进静音；音乐回来、站稳之后的第一个句头再换。</li>
+  <li><b>变形片段跨过段落起点</b>：让「变过去的那一下」正好迎上新段落。</li>
+  <li>段落起点按能量跳变加分：跳得越大，越该在那里换。</li>
+</ol>
+
+<h2><span class="n">05</span>核心功能与实现方式</h2>
+<table>
+  <tr><th style="width:18%">功能</th><th>做什么、怎么实现</th><th style="width:10%">状态</th></tr>
+  <tr><td>分轨</td><td>Demucs 拆成鼓 / 贝斯 / 人声 / 其他 4 轨（可选 6 轨）；分轨与原曲的时间偏移用互相关实测并自动补偿。</td><td class="done">已实现</td></tr>
+  <tr><td>精确卡点</td><td>鼓轨上拟合恒定节拍网格（粗搜 0.02 BPM / 4ms，细搜 0.001 BPM / 1ms），用底鼓起音沿修相位；速度在变的歌自动切换为逐拍跟踪；倍速错误自动纠正。分出底鼓、军鼓、踩镲，以及贝斯、人声、旋律的起音。</td><td class="done">已实现</td></tr>
+  <tr><td>结构分析</td><td>自相似矩阵 + 棋盘核找段落，结合能量台阶、乐器进出；识别气口（音乐骤停）；每个点给置信度，低置信度的点不当硬卡点。</td><td class="done">已实现</td></tr>
+  <tr><td>凯尔经模式</td><td>输入歌 + 按顺序排好的生长 / 变形片段 → 动态规划自动编排 → 凯尔经公式逐帧推播放头 → 1080p 出片。支持对照手排方案、直接使用手排方案。</td><td class="done">已实现</td></tr>
+  <tr><td>剪辑模式</td><td>普通素材按三层规则剪；底鼓推镜、军鼓闪光、贝斯光呼吸、人声贴近、旋律推画面；每一刀写明理由。</td><td class="done">已实现</td></tr>
+  <tr><td>导出到剪辑软件</td><td>Premiere / DaVinci（FCP7 XML）、Final Cut（FCPXML 1.10）、标记点 CSV：镜头入出点精确到帧，段落 / 乐句 / 强拍 / 重音 / 气口作为标记。</td><td class="done">已实现</td></tr>
+  <tr><td>卡点体检</td><td>从成片 mp4 逐帧解码，用相邻帧相关性找真实切点（闪光、推拉不误判）；量每一刀差几帧、军鼓是否同帧出动作、音画是否偏移；出 HTML 报告。</td><td class="done">已实现</td></tr>
+  <tr><td>自动生成素材库</td><td>根据锚点图自动排出首尾帧组合、写提示词、批量调用图生视频接口。</td><td class="plan">规划中</td></tr>
+  <tr><td>中文歌词逐字对齐</td><td>人声起句已用于切点；逐字对齐目前只有英文方案。</td><td class="plan">规划中</td></tr>
+  <tr><td>剪映导出</td><td>目前给剪映用户的是标记点清单。</td><td class="plan">规划中</td></tr>
+</table>
+
+<h2 class="pb"><span class="n">06</span>使用步骤</h2>
+<pre># 1. 安装（需要 macOS / Linux、Python 3.10+、FFmpeg；Apple Silicon 自动用 GPU 分轨）
+git clone https://github.com/Jane-xiaoer/xiaoer-beatsync-mv && cd xiaoer-beatsync-mv
+./install.sh
+
+# 2. 听歌：分轨 + 卡点（3 分钟的歌约 30 秒）
+./beatsync.sh analyze 歌.mp3 -o work/歌.cues.json
+
+# 3a. 凯尔经模式：素材按故事顺序给（mp4 或补帧后的帧序列文件夹）
+./beatsync.sh kells work/歌.cues.json 片段1.mp4 片段2_morph.mp4 … --audio 歌.mp3 -o work/mv.mp4
+
+# 3b. 剪辑模式：一条龙出片 + 导出时间线 + 体检
+./beatsync.sh make 歌.mp3 素材文件夹/ -o work/
+
+# 4. 体检任意成片（包括在剪映 / PR 里剪好的片子）
+./beatsync.sh check 成片.mp4 --cues work/歌.cues.json</pre>
+<p><b>在 AI Agent 里用</b>：把仓库放进 Claude Code / Codex 的技能目录，直接说「给这首歌做个卡点 MV，素材在这个文件夹」。Agent 读 <code>SKILL.md</code>，按素材自动选模式，交付前必须跑体检，并把用了什么模式、关键切点为什么在那里、体检数字一起汇报。</p>
+<h3>必要的人工参与</h3>
+<ul>
+  <li><b>开始前</b>：选歌、准备画面素材（凯尔经模式需要先用图生视频做好生长 / 变形片段），排好故事顺序；素材文件名带 <code>morph</code> / <code>变形</code> 的会被当作变形片段。</li>
+  <li><b>完成后</b>：看成片与体检报告；不满意的段落可以改 <code>plan.json</code> 里的起止时间，再用 <code>--use-plan</code> 重出。</li>
+</ul>
+
+<h2><span class="n">07</span>实现效果与案例：凯尔经 MV</h2>
+<p><b>输入</b>：《凯尔经的秘密》主题曲 What Are You Doing In My Forest（121.5 秒）+ 17 段 MJ 出画、首尾帧图生视频生成的生长与变形片段（按故事顺序）。<b>过程</b>：全自动，不看我当年的手排表。<b>输出</b>：1080p 成片，渲染用时 67 秒（Apple M5）。</p>
+<div class="frames">
+  <img src="assets/frame1.jpg"><img src="assets/frame2.jpg"><img src="assets/frame3.jpg"><img src="assets/frame4.jpg">
+</div>
+<div class="frames" style="grid-template-columns: repeat(3, 1fr);">
+  <img src="assets/frame5.jpg"><img src="assets/frame6.jpg"><img src="assets/frame7.jpg">
+</div>
+<p class="small mut">全自动版成片截帧（3s / 16s / 30s / 45s / 64s / 88s / 100s）。</p>
+
+<figure>
+  <img src="assets/compare.svg">
+  <figcaption>自动编排（蓝）与我手排定稿 v7（橙）的切点对比。灰绿底色是自动识别出的段落能量档，深色竖条是气口（33.8–37.0s，音乐静止）。</figcaption>
+</figure>
+
+<table>
+  <tr><th>验证项</th><th>结果</th><th>怎么量的</th></tr>
+  <tr><td>自动编排 vs 导演手排</td><td>16 个切点中 <b>11 个在 1 拍以内</b>；开头 5 个（含气口处理）与手排差 0–2 帧</td><td>同样 17 段素材、同样顺序，逐个比切点</td></tr>
+  <tr><td>推播放头复现</td><td>素材帧号误差 <b>0–3 帧</b>（96fps 素材，即 0.01–0.03 秒）</td><td>用手排表 + 当年分析数据重渲，逐帧比对成片取的是素材第几帧</td></tr>
+  <tr><td>渲染精度</td><td>切点 <b>100%</b> 落在计划的那一帧；军鼓「起音即动作」<b>98%</b> 同帧；音画偏移 <b>0ms</b></td><td>卡点体检：从成片 mp4 逐帧量</td></tr>
+  <tr><td>拍点准确度</td><td>F 值 <b>0.90</b>（±70ms），平均误差约 <b>10ms</b>，87% 在 1 帧内</td><td>24 首节拍已知的合成曲（直拍、摇摆、人手误差、速度漂移），MIREX 标准；分析程序看不到答案</td></tr>
+  <tr><td>鼓轨网格拟合</td><td>鼓点落在拍上的比例 <b>74% → 95%</b></td><td>同一首歌（Funkorama），分轨后在鼓轨上拟合网格 vs 普通逐拍跟踪</td></tr>
+  <tr><td>导出时间线</td><td>镜头入出点 <b>92/92</b> 全部对上</td><td>用 OpenTimelineIO 独立解析导出的 XML / FCPXML</td></tr>
+</table>
+
+<figure>
+  <img src="assets/checkup.png">
+  <figcaption>卡点体检报告（剪辑模式样例）：每一刀差几帧、起音是否同帧出动作、音画偏移，以及偏得最多的切点前后帧。</figcaption>
+</figure>
+
+<div class="box"><b>使用反馈</b>：我把全自动版与自己手排的 v7 左右并排对看，判断「可以了」——中段与高潮段的换镜与手排相差半拍到一拍半，主要是高潮里疏密的个人取舍；气口、变形跨段落这些关键处理与手排一致。</div>
+
+<h2 class="pb"><span class="n">08</span>体验方式与现阶段限制</h2>
+<table class="kv">
+  <tr><td>体验入口</td><td>GitHub 开源仓库 https://github.com/Jane-xiaoer/xiaoer-beatsync-mv（MIT），README 与 SKILL.md 内有完整说明；现场可实时演示：给一首歌，几分钟内出片与体检报告。</td></tr>
+  <tr><td>运行条件</td><td>macOS（Apple Silicon 推荐）或 Linux；Python 3.10+；FFmpeg；首次分轨会下载 Demucs 模型（约 300MB）。</td></tr>
+  <tr><td>模型 / 接口依赖</td><td>全部在本机运行，<b>不需要任何付费 API</b>。画面素材由创作者自备（可用任意图生视频工具生成）。</td></tr>
+  <tr><td>费用</td><td>工具本身免费；素材生成的费用取决于创作者选用的图生视频服务。</td></tr>
+</table>
+<h3>已知限制</h3>
+<ul>
+  <li>速度一直在漂移的慢歌（自由节奏、真人乐队）拍点会偏：合成曲测试中，72 / 100 BPM 加 ±4% 漂移时拍 F 值约 0.6。工具会给出置信度，低置信度的点不当硬卡点。</li>
+  <li>强拍有时会差半小节（前后半小节分不清）；凯尔经模式已按此设计（半小节都可切），剪辑模式下建议人工核对。</li>
+  <li>编排规则来自一位导演（我）对一支片子的判断；高潮里的疏密等个人风格无法完全还原，可在方案里手动调整。</li>
+  <li>导出的时间线已通过 OpenTimelineIO 验证，但尚未在每个剪辑软件版本中逐一实测导入。</li>
+  <li>体检遇到前后两段画面几乎一样的切点时无法测量，报告中会单独标出，不计入准确率。</li>
+  <li>演示案例使用的《凯尔经的秘密》主题曲为商业录音，仅作为技术示意；工具使用者需自行确认音乐与素材的版权。</li>
+</ul>
+
+<p class="mut small" style="margin-top:24pt;border-top:1px solid var(--line);padding-top:8pt">小耳 · 1075152691@qq.com · github.com/Jane-xiaoer</p>
+</body>
+</html>
