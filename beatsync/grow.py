@@ -314,6 +314,7 @@ def main(argv=None):
     ap.add_argument("--size", default="1920x1080")
     a = ap.parse_args(argv)
     out = a.out or str(Path(a.cues).with_name("grow.mp4"))
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
     grow(a.cues, a.library, out, a.audio, a.seed, a.preview, a.jobs, a.size)
 
 

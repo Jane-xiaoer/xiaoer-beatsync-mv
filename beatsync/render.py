@@ -199,6 +199,7 @@ def main(argv=None):
     ap.add_argument("--layers", default=",".join(ALL_LAYERS), help="分轨驱动哪些画面层，逗号分隔；空字符串 = 全关")
     a = ap.parse_args(argv)
     out = a.out or str(Path(a.plan).with_name("mv.mp4"))
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
     render(a.plan, out, a.jobs, a.preview, [x for x in a.layers.split(",") if x])
 
 

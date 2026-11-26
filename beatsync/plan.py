@@ -296,6 +296,7 @@ def main(argv=None):
                      "frames": int(round(cues["meta"]["duration"] * fps))},
             "shots": shots}
     out = Path(a.out or Path(a.cues).with_name("plan.json"))
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(plan, ensure_ascii=False, indent=1))
     out.with_suffix(".md").write_text(to_md(plan))
     lens = [s["end"] - s["start"] for s in shots]
