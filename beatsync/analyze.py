@@ -530,6 +530,7 @@ def main(argv=None):
     ap.add_argument("--no-stems", action="store_true", help="不分轨，只听整轨（快，但卡点单薄）")
     a = ap.parse_args(argv)
     out = Path(a.out or Path(a.audio).with_suffix(".cues.json"))
+    out.parent.mkdir(parents=True, exist_ok=True)
     sd = None
     if not a.no_stems:
         sd = a.stems or str(out.with_suffix("")) + ".stems"

@@ -189,6 +189,7 @@ def main(argv=None):
     cues = json.loads(Path(plan["meta"]["cues"]).read_text())
     mk = markers(plan, cues, a.markers)
     pre = Path(a.out or Path(a.plan).with_name("timeline"))
+    pre.parent.mkdir(parents=True, exist_ok=True)
     done = []
     if a.format in ("xml", "all"):
         p = pre.parent / (pre.name + ".xml"); p.write_text(to_xmeml(plan, cues, mk, a.with_speed)); done.append(f"{p}（Premiere / Resolve）")

@@ -13,11 +13,13 @@
 import argparse
 import json
 import os
+import random
 from pathlib import Path
 
 import numpy as np
 
 SR = 44100
+SEED = 2026                 # Demucs 随机平移的种子：固定后同一首歌每次分轨一致
 FOUR = ["drums", "bass", "vocals", "other"]
 SIX = FOUR + ["guitar", "piano"]
 
@@ -48,7 +50,7 @@ def separate(audio, out_dir, six=False, device=None):
     names = SIX if six else FOUR
     if meta_p.exists():
         meta = json.loads(meta_p.read_text())
-        if meta.get("audio") == str(audio) and meta.get("six") == six and all((out_dir / f"{n}.wav").exists() for n in names):
+        if meta.get("audio") == str(audio) and meta.get("six") == six and meta.get("seed") == SEED and all((out_dir / f"{n}.wav").exists() for n in names):
             return meta
     out_dir.mkdir(parents=True, exist_ok=True)
     model = "htdemucs_6s" if six else "htdemucs"
@@ -72,14 +74,21 @@ def separate(audio, out_dir, six=False, device=None):
     x = torch.from_numpy(wav[:m.audio_channels]).float()
     ref = x.mean(0)
     x = (x - ref.mean()) / (ref.std() + 1e-8)
-    with torch.no_grad():
-        out = apply_model(m, x[None], device=device, shifts=1, split=True, overlap=0.25, progress=False)[0]
+    # shifts=1 时 Demucs 用 random.randint 随机平移 0–0.5 秒再分轨，同一首歌每次分出来的轨都略有不同，
+    # 下游的起音、拍点、人声句子跟着变（实测两次：拍点最大差 41ms，人声句子 13 → 25）。固定种子，结果可复现。
+    rs = random.getstate()
+    random.seed(SEED)
+    try:
+        with torch.no_grad():
+            out = apply_model(m, x[None], device=device, shifts=1, split=True, overlap=0.25, progress=False)[0]
+    finally:
+        random.setstate(rs)
     out = out * (ref.std() + 1e-8) + ref.mean()
     for i, n in enumerate(m.sources):
         if n in names:
             sf.write(out_dir / f"{n}.wav", out[i].cpu().numpy().T, m.samplerate, subtype="FLOAT")
     off = measure_offset(audio, [out_dir / f"{n}.wav" for n in names])
-    meta = {"audio": str(audio), "model": model, "six": six, "stems": names,
+    meta = {"audio": str(audio), "model": model, "six": six, "seed": SEED, "stems": names,
             "offset_samples": int(off), "offset_ms": round(off / SR * 1000, 2)}
     meta_p.write_text(json.dumps(meta, ensure_ascii=False, indent=1))
     print(f"  ✓ {len(names)} 轨 · 分轨与原曲偏移 {meta['offset_ms']}ms（已自动补偿）")

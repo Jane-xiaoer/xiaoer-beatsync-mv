@@ -2,6 +2,7 @@
 """小耳音乐卡点MV · 第 4 步：卡点体检 —— 拿成片本身量，每一刀到底差几帧。
 
   beatsync check mv.mp4 --plan plan.json       # 对照方案：每一刀是否落在计划的那一帧
+  beatsync check mv.mp4 --plan mv.plan.json    # 凯尔经 / 生长模式的方案也行：段间是溶解，量溶解中点离计划差几帧
   beatsync check 任意成片.mp4 --cues cues.json  # 不需要方案：量任何剪辑（剪映/PR 剪的也行）离拍有多远
 
 体检只认成片：从 mp4 逐帧解码、算帧差找出真实的切点，不看作者导出的静帧或工程文件。
@@ -102,10 +103,32 @@ def thumb_pair(video, frame, fps, out_w=240):
     return base64.b64encode(raw).decode() if raw else ""
 
 
+def dissolve_mid(frames, pf, half, tol=6):
+    """溶解转场的中点（凯尔经 / 生长模式段间交叠溶解，没有硬切，相邻帧相关系数找不到它）。
+    取溶解开始前、结束后各一帧当参照 A、B，逐帧算和 A、B 的平均差：前一段占多数时离 A 近，后一段占多数时离 B 近，
+    两条曲线交叉的那一帧就是五五开的中点。返回帧号；前后两段画面太像、或找不到交叉，返回 None。"""
+    a0, b0 = pf - half - 2, pf + half + 2
+    if a0 < 0 or b0 >= len(frames):
+        return None
+    A, B = frames[a0], frames[b0]
+    if np.mean(np.abs(A - B)) < 4:
+        return None
+    idx = np.arange(a0, b0 + 1)
+    s = np.array([np.mean(np.abs(frames[i] - A)) - np.mean(np.abs(frames[i] - B)) for i in idx])
+    cross = [k for k in range(len(s) - 1) if s[k] < 0 <= s[k + 1]]
+    if not cross:
+        return None
+    cand = [idx[k] if -s[k] < s[k + 1] else idx[k + 1] for k in cross]
+    best = min(cand, key=lambda f: abs(f - pf))
+    return int(best) if abs(best - pf) <= tol else None
+
+
 def check(video, plan=None, cues=None, audio=None, out=None):
     if plan:
         P = json.loads(Path(plan).read_text())
-        cues = cues or P["meta"]["cues"]
+        cues = cues or P["meta"].get("cues")
+        if not cues:
+            raise SystemExit("✗ 方案里没记 cues.json 的位置，请加 --cues 指定")
         audio = audio or P["meta"]["audio"]
     C = json.loads(Path(cues).read_text())
     fps = (P["meta"]["fps"] if plan else C["meta"]["fps"])
@@ -116,7 +139,21 @@ def check(video, plan=None, cues=None, audio=None, out=None):
     beat_frames = np.array([round(b["t"] * fps) for b in C["beats"]])
     down_frames = np.array([round(b["t"] * fps) for b in C["downbeats"]])
     rows = []
-    if plan:
+    dissolve = bool(plan) and "segments" in P                   # 凯尔经 / 生长模式：段间溶解，不是硬切
+    if dissolve:
+        segs = P["segments"]
+        planned = [s.get("frame_in", round(s["start"] * fps)) for s in segs][1:]
+        for s, pf in zip(segs[1:], planned):
+            half = int(round(s.get("xf", 0.4) * fps))
+            mid = dissolve_mid(frames, pf, half)
+            rows.append({"frame": pf, "t": pf / fps, "found": mid, "off": None if mid is None else mid - pf,
+                         "why": s.get("why", "")})
+        offs = [r["off"] for r in rows if r["off"] is not None]
+        missing = sum(1 for r in rows if r["off"] is None)
+        win = max(int(round(s.get("xf", 0.4) * fps)) for s in segs) + 6
+        extra = len([f for f in found if not planned or np.min(np.abs(np.array(planned) - f)) > win])
+        rep.update(mode="对照方案", transition="溶解转场，量中点", planned=len(planned), missing=missing, extra=extra)
+    elif plan:
         planned = [s["frame_in"] for s in P["shots"]][1:]       # 第一镜从 0 开始，不算切点
         why = {s["frame_in"]: s["cut_why"] for s in P["shots"]}
         fa = np.array(found) if found else np.array([10 ** 9])
@@ -142,7 +179,7 @@ def check(video, plan=None, cues=None, audio=None, out=None):
                mean_abs_frames=round(float(np.mean(np.abs(offs))), 3),
                max_abs_frames=int(np.max(np.abs(offs))))
     st = C.get("stems")
-    if st and st["onsets"].get("snare"):
+    if st and st["onsets"].get("snare") and not dissolve:       # 凯尔经 / 生长模式靠推播放头，不做「军鼓亮一下」
         ao = action_sync(frames, st["onsets"]["snare"], fps, found)
         if ao:
             ao = np.array(ao)
@@ -152,6 +189,7 @@ def check(video, plan=None, cues=None, audio=None, out=None):
         rep["av_offset_ms"] = None if (o := av_offset_ms(video, audio)) is None else round(o, 1)
 
     out = Path(out or Path(video).with_suffix(".check.html"))
+    out.parent.mkdir(parents=True, exist_ok=True)
     worst = sorted([r for r in rows if r["off"] is not None], key=lambda r: -abs(r["off"]))[:6]
     for r in worst:
         r["img"] = thumb_pair(video, r["found"], fps)
@@ -192,7 +230,7 @@ def report_html(rep, rows, worst, C, diff, fps):
                 f'≤1 帧 {a_["within1"] / a_["n"] * 100:.0f}%</span></div>') if a_ else ""
     av = rep.get("av_offset_ms")
     av_txt = "—" if av is None else f"{av:+.0f} ms"
-    head = (f"对照方案：计划 {rep['planned']} 刀，找到 {rep['planned'] - rep['missing']} 刀，漏 {rep['missing']}，多出 {rep['extra']}"
+    head = (f"对照方案{('（' + rep['transition'] + '）') if rep.get('transition') else ''}：计划 {rep['planned']} 刀，找到 {rep['planned'] - rep['missing']} 刀，漏 {rep['missing']}，多出 {rep['extra']}"
             if rep["mode"] == "对照方案" else f"不看方案：成片里找到 {rep['found_cuts']} 刀，逐刀量离最近的拍多远")
     return f"""<!doctype html><html lang="zh"><meta charset="utf-8"><title>卡点体检</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -238,7 +276,7 @@ def main(argv=None):
         raise SystemExit("✗ 需要 --plan 或 --cues")
     rep, out = check(a.video, a.plan, a.cues, a.audio, a.out)
     m = rep.get("measured") or 1
-    print(f"卡点体检 · {rep['mode']}")
+    print(f"卡点体检 · {rep['mode']}" + (f"（{rep['transition']}）" if rep.get("transition") else ""))
     if rep["mode"] == "对照方案":
         print(f"  计划 {rep['planned']} 刀 · 漏 {rep['missing']} · 多出 {rep['extra']}")
     print(f"  正好落在那一帧 {rep['exact']}/{m}（{rep['exact'] / m * 100:.0f}%） · ≤1 帧 {rep['within1'] / m * 100:.0f}% · "

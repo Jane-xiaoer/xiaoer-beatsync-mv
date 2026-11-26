@@ -362,6 +362,25 @@ def compare(segs, ref_path, fps):
     return rows
 
 
+STRETCH_WARN = 2.5
+
+
+def warn_stretched(segs, n_clips, dur):
+    """素材不够时提醒：某段实际铺的时长超过它「想要」的 2.5 倍，播放头会被拖得很慢，画面几乎停住。
+    （手排方案没有「想要」时长，target_share = 0，不检查。）"""
+    long = [s for s in segs if s.get("target_share") and s["end"] - s["start"] > STRETCH_WARN * s["target_share"]]
+    if not long:
+        return []
+    want = sum(s["target_share"] for s in segs)
+    print(f"\n⚠ 素材不够：{n_clips} 段素材按乐句只够铺约 {want:.0f}s，歌有 {dur:.0f}s。下面几段被拉长、画面会走得很慢：")
+    for s in long:
+        print(f"    {s['id']}  铺了 {s['end'] - s['start']:.1f}s（想要 {s['target_share']:.1f}s，"
+              f"{(s['end'] - s['start']) / s['target_share']:.0f} 倍）")
+    print("  建议：补素材（大约再要 "
+          f"{max(1, round((dur - want) / max(1e-6, want / n_clips)))} 段），或先把音乐剪短。\n")
+    return long
+
+
 def main(argv=None):
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -404,12 +423,17 @@ def main(argv=None):
     if not a.use_plan:
         segs = auto_plan(cues, clips, C, dur)
     out = Path(a.out or Path(a.cues).with_name("kells.mp4"))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    for s in segs:                                   # 体检按帧号对照（和 grow 的方案格式一致）
+        s["frame_in"], s["frame_out"] = int(round(s["start"] * fps)), int(round(s["end"] * fps))
     pj = out.with_suffix(".plan.json")
-    pj.write_text(json.dumps({"meta": {"mode": "kells", "audio": str(Path(audio).resolve()), "fps": fps, "duration": dur},
+    pj.write_text(json.dumps({"meta": {"mode": "kells", "audio": str(Path(audio).resolve()),
+                                       "cues": str(Path(a.cues).resolve()), "fps": fps, "duration": dur},
                               "segments": segs}, ensure_ascii=False, indent=1))
     print(f"✓ 方案 {pj}")
     for s in segs:
         print(f"  {s['start']:7.2f}–{s['end']:7.2f}s  {s['id']:<10} {s['end'] - s['start']:5.2f}s（想要 {s['target_share']:.1f}s）  {s['why']}")
+    warn_stretched(segs, len(clips), dur)
     if a.compare:
         rows = compare(segs, a.compare, fps)
         d = np.array([abs(r[2]) for r in rows])
